@@ -1,67 +1,113 @@
-import 'package:basic_app/ui/screens/home.dart';
 import 'package:flutter/material.dart';
+// Uncomment lines 7 and 10 to view the visual layout at runtime.
+//import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
 
-// Dieser Screen (Bildschirm) wird beim start der App angezeigt. Hier können Daten im Hintergrund geladen werden.
-class SplashScreen extends StatefulWidget {
-  // Der Routenname wird zur navigation zwischen den Screens (Bildschirmansichten) verwendet.
-  static const String routeName = "/splash";
-
-  const SplashScreen({Key? key}) : super(key: key);
-
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
+void main() {
+  //debugPaintSizeEnabled = true;
+  runApp(new MyApp());
 }
 
-class _SplashScreenState extends State<SplashScreen> {
-  bool _loadingData = true;
-  @override
-  void initState() {
-    super.initState();
-    // Hier kannst du Funktionen aufrufen, die beim aufrufen (anzeigen) des Screens (Bildschirms) ausgeführt werden sollen.
-    _loadData();
-  }
-
-  Future<void> _loadData() async {
-    // Setze den Wert _loadingData, zum überprüfen, ob gerade Daten geladen werden auf "true".
-    setState(() {
-      _loadingData = true;
-    });
-
-    // Hier wird einfach 1 Sekunde gewartet.
-    await Future.delayed(const Duration(seconds: 3));
-
-    // Wenn alle daten geladen wurden navigiere zum HomeScreen
-    _navigateToHome();
-
-    // Setze den Wert _loadingData, zum überprüfen, ob gerade Daten geladen werden auf "false".
-    setState(() {
-      _loadingData = false;
-    });
-  }
-
-  // Funktion um zum HomeScreen zu navigieren
-  void _navigateToHome() {
-    // Wenn alle daten geladen wurden navigiere zum HomeScreen
-    Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Diese methode wird jedesmal ausgeführt, wenn setState() aufgerufen wird, weil es sich um den State (Status) eines StatefullWidget (Widget mit Status) handelt.
+    Widget titleSection = new Container(
+      padding: const EdgeInsets.all(32.0),
+      child: new Row(
+        children: [
+          new Expanded(
+            child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                new Container(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: new Text(
+                    'Oeschinen Lake Campground',
+                    style: new TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                new Text(
+                  'Kandersteg, Switzerland',
+                  style: new TextStyle(
+                    color: Colors.grey[500],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          new Icon(
+            Icons.star,
+            color: Colors.red[500],
+          ),
+          new Text('41'),
+        ],
+      ),
+    );
 
-    return Container(
-      color: Colors.white,
-      child: Column(
+    Column buildButtonColumn(IconData icon, String label) {
+      Color color = Theme.of(context).primaryColor;
+
+      return new Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const FlutterLogo(
-            size: 100,
+          new Icon(icon, color: color),
+          new Container(
+            margin: const EdgeInsets.only(top: 8.0),
+            child: new Text(
+              label,
+              style: new TextStyle(
+                fontSize: 12.0,
+                fontWeight: FontWeight.w400,
+                color: color,
+              ),
+            ),
           ),
-          const SizedBox(
-            height: 30,
-          ),
-          _loadingData ? const CircularProgressIndicator() : const SizedBox(),
         ],
+      );
+    }
+
+    Widget buttonSection = new Container(
+      child: new Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          buildButtonColumn(Icons.call, 'CALL'),
+          buildButtonColumn(Icons.near_me, 'ROUTE'),
+          buildButtonColumn(Icons.share, 'SHARE'),
+        ],
+      ),
+    );
+
+    Widget textSection = new Container(
+      padding: const EdgeInsets.all(32.0),
+      child: new Text(
+        '''
+Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situated 1,578 meters above sea level, it is one of the larger Alpine Lakes. A gondola ride from Kandersteg, followed by a half-hour walk through pastures and pine forest, leads you to the lake, which warms to 20 degrees Celsius in the summer. Activities enjoyed here include rowing, and riding the summer toboggan run.
+        ''',
+        softWrap: true,
+      ),
+    );
+
+    return new MaterialApp(
+      title: 'Flutter Demo',
+      home: new Scaffold(
+        appBar: new AppBar(
+          title: new Text('Top Lakes'),
+        ),
+        body: new ListView(
+          children: [
+            new Image.asset(
+              'images/lake.jpg',
+              width: 600.0,
+              height: 240.0,
+              fit: BoxFit.cover,
+            ),
+            titleSection,
+            buttonSection,
+            textSection,
+          ],
+        ),
       ),
     );
   }
