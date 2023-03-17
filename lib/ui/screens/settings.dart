@@ -1,49 +1,68 @@
-import 'package:basic_app/utilities/constants.dart';
+import 'package:basic_app/ui/screens/settings.dart';
 import 'package:flutter/material.dart';
 
-// In diesem Screen (Bildschirm) können Einstellungen in der App vorgenommen werden
-class SettingsScreen extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   // Der Routenname wird zur navigation zwischen den Screens (Bildschirmansichten) verwendet.
-  static const String routeName = "/settings";
+  static const String routeName = "/home";
 
-  const SettingsScreen({Key? key}) : super(key: key);
+  const HomeScreen({
+    super.key,
+  });
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final GlobalKey<ScaffoldState> globalFromKey = GlobalKey<ScaffoldState>();
+  int _counter = 0;
 
-  String _teamMembers = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _loadTeamMembers();
-  }
-
-  _loadTeamMembers() {
+  void _incrementCounter() {
     setState(() {
-      _teamMembers = Constants.teamMembersNames.join(', ');
+      // Der Aufruf der setState() Funktion, sagt Flutter, dass sich etwas im State verändert hat und die build Funktion erneut ausgeführt werden muss.
+      _counter++;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    // Diese methode wird jedesmal ausgeführt, wenn setState() aufgerufen wird, weil es sich um den State (Status) eines StatefullWidget (Widget mit Status) handelt.
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: const Text("Einstellungen"),
-      ),
-      body: ListView(
-        children: [
-          const Divider(),
-          Center(
-            child: Text('Eine App von $_teamMembers'),
-          )
+        title: const Text("Home"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(SettingsScreen.routeName);
+            },
+            icon: const Icon(
+              Icons.settings,
+            ),
+          ),
         ],
+      ),
+      body: Center(
+        // Center ist ein Layout-Widget. Es hat ein beinhaltet ein einzelnen child (unter) Widget und positioniert es mitting im parent (über) Widget
+        child: Column(
+          // Column verfügt über verschiedene Eigenschaften, um zu steuern, wie es sich selbst dimensioniert und wie es seine untergeordneten Elemente positioniert. Hier verwenden wir mainAxisAlignment, um die Kinder vertikal zu zentrieren; die Hauptachse ist hier die vertikale Achse, weil Spalten vertikal sind (die Querachse wäre horizontal).
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'So oft hast du den Button geklickt:',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Hochzählen',
+        child: const Icon(Icons.add),
       ),
     );
   }

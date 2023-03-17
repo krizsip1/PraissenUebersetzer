@@ -1,4 +1,5 @@
 import 'package:basic_app/ui/screens/home.dart';
+import 'package:basic_app/ui/screens/infoscreen.dart';
 import 'package:basic_app/ui/screens/settings.dart';
 import 'package:basic_app/ui/screens/splash.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       routes: {
         SplashScreen.routeName: (context) => const SplashScreen(),
         HomeScreen.routeName: (context) => const HomeScreen(),
+        Infoscreen.routeName: (context) => const Infoscreen()
         SettingsScreen.routeName: (context) => const SettingsScreen(),
       },
       initialRoute: SplashScreen.routeName,
